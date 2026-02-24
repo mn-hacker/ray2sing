@@ -1,10 +1,15 @@
 name: Go Test
 
+# Disabled: ray2sing is built as a submodule of hiddify-core.
+# Its go.mod has local replace directives (../hiddify-sing-box)
+# that only work in the parent project context.
+# on:
+#   push:
+#     branches: [ main ]
+#   pull_request:
+#     branches: [ main ]
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   test:
@@ -12,16 +17,16 @@ jobs:
 
     steps:
     - name: Set up Go
-      uses: actions/setup-go@v3
+      uses: actions/setup-go@v5
       with:
-        go-version: 1.21
+        go-version: ^1.25.6
       id: go
 
     - name: Check out code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
-    - name: Get dependencies
-      run: go mod download
-
-    - name: Run tests
-      run: go test ./...
+    - name: Note
+      run: |
+        echo "ray2sing is built as part of hiddify-core."
+        echo "Its go.mod uses local replace directives that require the parent project."
+        echo "Run tests from the hiddify-core repo instead."
